@@ -1,0 +1,11 @@
+﻿.grid-icon{
+    cursor:pointer;
+    color:#A9A9A9;
+}
+.grid-icon:hover{
+    color:#1E90FF;
+}
+
+.empty-icon{
+    margin-left:10px;
+}

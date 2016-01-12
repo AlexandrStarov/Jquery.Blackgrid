@@ -1,0 +1,40 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewBag.Title = "Test";
+}
+<div class="panel panel-success" style="margin-top: 50px;">
+    <div class="panel-heading">
+        <p>Test grid</p>
+    </div>
+    <div class="panel-body">
+        <table id="dynamic-grid" class="table table-responsive table-bordered"></table>
+
+
+        <table id="dynamic-grid2" class="table table-responsive table-bordered"></table>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.CreateGrid('dynamic-grid', "/api/countries/", [
+            { name: "name", text: "Name", width: 200 },
+            { name: "description", text: "Description", width: 200 }
+        ]);
+
+        $.CreateGrid('dynamic-grid2', "/api/countries/test/", [
+            { name: "name", text: "Name", width: 200 },
+            { name: "description", text: "Description", width: 200 }
+        ]);
+
+        $(document).bind('DownloadSuccessful', function (e, id, url) {
+            console.log('id: ' + id + '; url: ' + url);
+        });
+
+        $(document).on('ll', function () {
+            console.log("event");
+        });
+    });
+</script>
