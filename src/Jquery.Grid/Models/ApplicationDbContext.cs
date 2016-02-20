@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 
-namespace Jquery.Grid.Models
+namespace Jquery.BlackGrid.Models
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

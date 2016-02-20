@@ -7,11 +7,11 @@ using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
-using Jquery.Grid.Models;
-using Jquery.Grid.Services;
-using Jquery.Grid.ViewModels.Manage;
+using Jquery.BlackGrid.Models;
+using Jquery.BlackGrid.Services;
+using Jquery.BlackGrid.ViewModels.Manage;
 
-namespace Jquery.Grid.Controllers
+namespace Jquery.BlackGrid.Controllers
 {
     [Authorize]
     public class ManageController : Controller

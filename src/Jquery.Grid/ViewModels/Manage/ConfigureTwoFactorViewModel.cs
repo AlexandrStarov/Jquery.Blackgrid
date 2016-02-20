@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc.Rendering;
 
-namespace Jquery.Grid.ViewModels.Manage
+namespace Jquery.BlackGrid.ViewModels.Manage
 {
     public class ConfigureTwoFactorViewModel
     {

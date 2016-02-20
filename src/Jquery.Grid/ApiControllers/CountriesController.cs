@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-using Jquery.Grid.Models;
+using Jquery.BlackGrid.Models;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Jquery.Grid.ApiControllers
+namespace Jquery.BlackGrid.ApiControllers
 {
     [Route("api/[controller]")]
     public class CountriesController : Controller

@@ -9,11 +9,10 @@ using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Jquery.Grid.Models;
-using Jquery.Grid.Services;
+using Jquery.BlackGrid.Models;
+using Jquery.BlackGrid.Services;
 
-namespace Jquery.Grid
-{
+namespace Jquery.BlackGrid {
     public class Startup
     {
         public Startup(IHostingEnvironment env)

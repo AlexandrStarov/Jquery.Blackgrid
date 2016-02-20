@@ -6,9 +6,9 @@ using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
 using Microsoft.Data.Entity.Migrations;
-using Jquery.Grid.Models;
+using Jquery.BlackGrid.Models;
 
-namespace Jquery.Grid.Migrations
+namespace Jquery.BlackGrid.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot

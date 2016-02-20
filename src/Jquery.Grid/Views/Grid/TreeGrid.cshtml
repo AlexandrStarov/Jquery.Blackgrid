@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Tree grid";
+}
+
+<div class="panel panel-success" style="margin-top: 50px;">
+    <div class="panel-heading">
+        <p>Test grid</p>
+    </div>
+    <div class="panel-body">
+        <table id="dynamic-grid" class="table table-responsive table-bordered blackgrid"></table>
+
+
+        <table id="dynamic-grid2" class="table table-responsive table-bordered"></table>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.BlackGrid.Create('dynamic-grid', "/api/countries/", [
+            { name: "name", text: "Name", width: 200 },
+            { name: "description", text: "Description", width: 200 }
+        ]);
+
+        $.BlackGrid.Create('dynamic-grid2', "/api/countries/test/", [
+            { name: "name", text: "Name", width: 200 },
+            { name: "description", text: "Description", width: 200 }
+        ]);
+
+        $(document).bind('BlackGrid_DownloadSuccessful', function (e, id, url) {
+            //console.log('id: ' + id + '; url: ' + url);
+        });
+
+        $(document).bind('BlackGrid_SelectedRow', function (e, tableId, rowIndex) {
+            console.log($.BlackGrid.GetObject(tableId, rowIndex));
+            console.log('id: ' + tableId + '; rowIndex: ' + rowIndex);
+        });
+    });
+</script>

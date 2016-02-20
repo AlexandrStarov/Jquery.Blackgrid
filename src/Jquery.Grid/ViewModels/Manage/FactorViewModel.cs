@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Jquery.Grid.ViewModels.Manage
+namespace Jquery.BlackGrid.ViewModels.Manage
 {
     public class FactorViewModel
     {

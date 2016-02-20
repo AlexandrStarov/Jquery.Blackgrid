@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Jquery.Grid.Models {
+namespace Jquery.BlackGrid.Models {
     public class LocationsService
     {
         public static List<Location> GetLocations() {

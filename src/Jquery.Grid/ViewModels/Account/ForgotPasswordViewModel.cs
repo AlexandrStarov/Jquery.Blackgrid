@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Jquery.Grid.ViewModels.Account
+namespace Jquery.BlackGrid.ViewModels.Account
 {
     public class ForgotPasswordViewModel
     {

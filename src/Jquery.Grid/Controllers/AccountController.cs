@@ -9,11 +9,11 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Logging;
-using Jquery.Grid.Models;
-using Jquery.Grid.Services;
-using Jquery.Grid.ViewModels.Account;
+using Jquery.BlackGrid.Models;
+using Jquery.BlackGrid.Services;
+using Jquery.BlackGrid.ViewModels.Account;
 
-namespace Jquery.Grid.Controllers
+namespace Jquery.BlackGrid.Controllers
 {
     [Authorize]
     public class AccountController : Controller

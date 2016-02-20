@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Jquery.Grid.Models {
+namespace Jquery.BlackGrid.Models {
     public class Location
     {
         [JsonProperty(PropertyName = "id")]
