@@ -7,33 +7,45 @@
         <p>Test grid</p>
     </div>
     <div class="panel-body">
-        <table id="dynamic-grid" class="table table-responsive table-bordered blackgrid"></table>
-
-
-        <table id="dynamic-grid2" class="table table-responsive table-bordered"></table>
-
+        <div id="dynamic-grid" class=""></div>
+        <div id="dynamic-grid2"></div>
     </div>
 </div>
 
 <script>
     $(document).ready(function () {
-        $.BlackGrid.Create('dynamic-grid', "/api/countries/", [
-            { name: "name", text: "Name", width: 200 },
-            { name: "description", text: "Description", width: 200 }
-        ]);
 
-        $.BlackGrid.Create('dynamic-grid2', "/api/countries/test/", [
-            { name: "name", text: "Name", width: 200 },
-            { name: "description", text: "Description", width: 200 }
-        ]);
+        $.BlackGrid.Create({
+            Id: 'dynamic-grid',
+            TableClasses: 'table table-responsive table-bordered blackgrid',
+            Url: '/api/countries/',
+            Columns: [{ name: "Name", text: "Name", searchable: true },
+                { name: "Description", text: "Description", searchable: true }]
+        },
+        {
+            GlobalSearch: true,
+            MinimalLengthOfTheSearch: 3
+        });
+
+        //$.BlackGrid.Create({
+        //    Id: 'dynamic-grid2',
+        //    TableClasses: 'table table-responsive table-bordered blackgrid',
+        //    Url: '/api/countries/',
+        //    Columns: [{ name: "Name", text: "Name", searchable: true },
+        //        { name: "Description", text: "Description", searchable: true }]
+        //},
+        //{
+        //    SaveTreeAfterSearching: false,
+        //    GlobalSearch: false
+        //});
 
         $(document).bind('BlackGrid_DownloadSuccessful', function (e, id, url) {
             //console.log('id: ' + id + '; url: ' + url);
         });
 
         $(document).bind('BlackGrid_SelectedRow', function (e, tableId, rowIndex) {
-            console.log($.BlackGrid.GetObject(tableId, rowIndex));
-            console.log('id: ' + tableId + '; rowIndex: ' + rowIndex);
+            //console.log($.BlackGrid.GetObject(tableId, rowIndex));
+            //console.log('id: ' + tableId + '; rowIndex: ' + rowIndex);
         });
     });
 </script>

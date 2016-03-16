@@ -3,15 +3,15 @@
 namespace Jquery.BlackGrid.Models {
     public class Location
     {
-        [JsonProperty(PropertyName = "id")]
+        //[JsonProperty(PropertyName = "id")]
         public int Id { get; set; }
-        [JsonProperty(PropertyName = "parentId")]
+        //[JsonProperty(PropertyName = "parentId")]
         public int? ParentId { get; set; }
-        [JsonProperty(PropertyName = "name")]
+        //[JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
-        [JsonProperty(PropertyName = "description")]
+        //[JsonProperty(PropertyName = "description")]
         public string Description { get; set; }
-        [JsonProperty(PropertyName = "hasChildren")]
+        //[JsonProperty(PropertyName = "hasChildren")]
         public bool HasChildren { get; set; }
     }
 }
