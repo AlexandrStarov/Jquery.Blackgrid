@@ -1,0 +1,67 @@
+﻿.grid-icon{
+    cursor:pointer;
+    color:#A9A9A9;
+}
+/*.grid-icon:hover{
+    color:#1E90FF;
+
+}*/
+
+.empty-icon{
+    margin-left:10px;
+}
+
+table.blackgrid tbody tr:hover {
+background-color: #00BFFF;
+}
+
+.blackgrid-selected{
+    background-color:#1E90FF;
+}
+
+.inner-addon { 
+    position: relative; 
+}
+
+.inner-addon .fa {
+  position: absolute;
+  padding: 10px;
+  pointer-events: none;
+}
+
+.left-addon .fa  { left:  0px;}
+.right-addon .fa { right: 0px;}
+
+.left-addon input  { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }
+
+.blackgrid-main{
+    position: relative;
+  width: 100%;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.blackgrid-main > .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.blackgrid-main .overlay {
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 3px;
+}
+.blackgrid-main .overlay > .fa {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -15px;
+  margin-top: -15px;
+  color: #000;
+  font-size: 30px;
+}
+.blackgrid-main .overlay.dark {
+  background: rgba(0, 0, 0, 0.5);
+}
