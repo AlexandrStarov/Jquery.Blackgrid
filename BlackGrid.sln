@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6312B0D2-B5F2-46CA-A68A-8B082F9BB3D6}"
 	ProjectSection(SolutionItems) = preProject
 		global.json = global.json
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Jquery.BlackGrid", "src\Jquery.Grid\Jquery.BlackGrid.xproj", "{AC1472D3-3262-42C5-9DA5-0E7C0BDED3FE}"

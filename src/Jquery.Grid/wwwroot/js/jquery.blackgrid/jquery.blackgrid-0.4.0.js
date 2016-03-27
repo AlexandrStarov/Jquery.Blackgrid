@@ -5,35 +5,35 @@
     var _checkedObjects = {};
 
     $.BlackGrid.Create = function (tableParameters, searchingParameters) {
-        var tableId = "tbl-" + tableParameters.Id
+        var tableId = "tbl-" + tableParameters.id
         _tables[tableId] = tableParameters;
-        _tables[tableId]['SearchingParameters'] = searchingParameters;
+        _tables[tableId]['searchingParameters'] = searchingParameters;
 
-        if (searchingParameters.GlobalSearch) {
-            $('#' + tableParameters.Id).append(_getGlobalSearchMarkup() + '<br />' + '<br />');
+        if (searchingParameters.globalSearch) {
+            $('#' + tableParameters.id).append(_getGlobalSearchMarkup() + '<br />' + '<br />');
         }
 
         var mainCheckbox = ['', ''];
-        if (tableParameters.EnableCheckBox) {
+        if (tableParameters.enableCheckBox) {
             mainCheckbox = ['<label class="checkbox-inline"><input type="checkbox" data-name="main"> ', '</label>'];
         }
 
         var cells = '';
-        $.each(tableParameters.Columns, function (index, value) {
+        $.each(tableParameters.сolumns, function (index, value) {
             if (index == 0) {
                 cells += '<td data-name="' + this.name + '" data-searchable="' + this.searchable + '">' + mainCheckbox[0] + this.text + mainCheckbox[1] + '</td>\n';
             } else {
                 cells += '<td data-name="' + this.name + '" data-searchable="' + this.searchable + '">' + this.text + '</td>\n';
             }
         });
-        $('#' + tableParameters.Id).append('<div class="blackgrid-main"><table id="' + tableId + '" class="' + tableParameters.TableClasses + '"><thead><tr>' + cells + '</tr></thead><tbody></tbody></table></div>')
+        $('#' + tableParameters.id).append('<div class="blackgrid-main"><table id="' + tableId + '" class="' + tableParameters.tableClasses + '"><thead><tr>' + cells + '</tr></thead><tbody></tbody></table></div>')
 
-        _loadChildren(null, tableParameters.Url, tableId);
+        _loadChildren(null, tableParameters.url, tableId);
     };
 
     function _hideColumns(tableId) {
         var headDictionary = _getHeadDictionary(tableId);
-        var columnsParameters = _tables[tableId].Columns;
+        var columnsParameters = _tables[tableId].сolumns;
 
         $.each(headDictionary, function (key, value) {
             $.each(columnsParameters, function (index, column) {
@@ -60,7 +60,7 @@
         $.each(headDictionary, function (key, value) {
             rowObject[key] = $.trim($(tdArr$[value]).text());
         });
-        rowObject['Id'] = objectId;
+        rowObject['id'] = objectId;
         rowObject['ParentId'] = $('#' + tableId + ' tbody tr[data-id=' + objectId + ']').data('parentid');
         return rowObject;
     }
@@ -82,14 +82,14 @@
         paddingLeft += 14;
         var rowData = '';
         var checked = false;
-        if (_tables[tableId].EnableCheckBox) {
+        if (_tables[tableId].enableCheckBox) {
             checked = $('#' + tableId).find('tr[data-id=' + parentId + ']').find('input[type=checkbox]').is(':checked');
         }
-        var columnsParameters = _tables[tableId].Columns;
+        var columnsParameters = _tables[tableId].сolumns;
 
         $.each(headDictionary, function (key, value) {
             if (value == 0) {
-                if (_tables[tableId].EnableCheckBox) {
+                if (_tables[tableId].enableCheckBox) {
                     rowData += '<td style="padding-left:' + paddingLeft + 'px;">' + icon + ' <label class="checkbox-inline"><input type="checkbox" ' + _getFinalDecisionByCheckbox(checked, data.Id, tableId) + '> ' + data[key] + '</label></td>'
                 } else {
                     rowData += '<td style="padding-left:' + paddingLeft + 'px;">' + icon + ' ' + data[key] + '</td>'
@@ -108,7 +108,7 @@
 
         if (objs != undefined) {
             $.each(objs, function (index, obj) {
-                if (obj.Id == objectId) {
+                if (obj.id == objectId) {
                     contains = true;
                 }
             });
@@ -129,7 +129,7 @@
             rowData += '<td>' + data[key] + '</td>'
         });
 
-        return '<tr data-role="row" data-id="' + data.Id + '">' + rowData + '</tr>';
+        return '<tr data-role="row" data-id="' + data.id + '">' + rowData + '</tr>';
     }
 
     function _loadChildren(parent$, url, tableId) {
@@ -153,7 +153,7 @@
                 _enableLoading(tableId, false);
                 $(document).trigger('BlackGrid_DownloadSuccessful', [tableId, url]);
                 var headDictionary = _getHeadDictionary(tableId)
-                var enableCheckbox = _tables[tableId].EnableCheckBox;
+                var enableCheckbox = _tables[tableId].enableCheckBox;
 
                 if (parentId == null) {
                     $.each(data, function (index, value) {
@@ -283,7 +283,7 @@
 
         if ($(this).hasClass('fa-caret-right')) {
             $(this).removeClass('fa-caret-right').addClass('fa-caret-down');
-            _loadChildren(tr$, _tables[tableId].Url, tableId);
+            _loadChildren(tr$, _tables[tableId].url, tableId);
         } else {
             $(this).removeClass('fa-caret-down').addClass('fa-caret-right');
             _removeChildren($(tr$).data('id'), tableId);
@@ -293,7 +293,7 @@
     $(document).on('keydown', '.bg-global-search[type="text"]', function () {
         var tableId = _getTableIdFromGlobalSearch(this);
 
-        if ($(this).val().length < _tables[tableId].SearchingParameters.MinimalLengthOfTheSearch) {
+        if ($(this).val().length < _tables[tableId].searchingParameters.minimalLength) {
             _tablesCache[tableId] = $('#' + tableId).find('tbody tr').clone(true);
         }
     });
@@ -301,9 +301,9 @@
     $(document).on('keyup', '.bg-global-search[type="text"]', function () {
         var tableId = _getTableIdFromGlobalSearch(this);
 
-        if (_tables[tableId].SearchingParameters.GlobalSearch && $(this).val().length >= _tables[tableId].SearchingParameters.MinimalLengthOfTheSearch) {
+        if (_tables[tableId].searchingParameters.globalSearch && $(this).val().length >= _tables[tableId].searchingParameters.minimalLength) {
             var model = _getQueryModel(null, tableId, $(this).val());
-            var url = _tables[tableId].Url;
+            var url = _tables[tableId].url;
             _enableLoading(tableId, true);
 
             $.ajax({

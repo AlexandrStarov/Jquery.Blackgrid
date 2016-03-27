@@ -16,28 +16,27 @@
     $(document).ready(function () {
 
         $.BlackGrid.Create({
-            Id: 'dynamic-grid',
-            TableClasses: 'table table-responsive table-bordered blackgrid',
-            Url: '/api/countries/',
-            Columns: [{ name: "Name", text: "Name", searchable: true },
+            id: 'dynamic-grid',
+            tableClasses: 'table table-responsive table-bordered blackgrid',
+            url: '/api/countries/',
+            сolumns: [{ name: "Name", text: "Name" },
                 { name: "Description", text: "Description", searchable: true }]
         },
         {
-            GlobalSearch: true,
-            MinimalLengthOfTheSearch: 3
+            globalSearch: true,
+            minimalLength: 3
         });
 
         $.BlackGrid.Create({
-            Id: 'dynamic-grid2',
-            TableClasses: 'table table-responsive table-bordered blackgrid',
-            Url: '/api/countries/',
-            Columns: [{ name: "Name", text: "Name", searchable: true },
+            id: 'dynamic-grid2',
+            tableClasses: 'table table-responsive table-bordered blackgrid',
+            url: '/api/countries/',
+            сolumns: [{ name: "Name", text: "Name", searchable: true },
                 { name: "Description", text: "Description", searchable: true, visible: false }],
-            EnableCheckBox: true
+            enableCheckBox: true
         },
         {
-            SaveTreeAfterSearching: false,
-            GlobalSearch: false
+            globalSearch: false
         });
 
         $(document).bind('BlackGrid_DownloadSuccessful', function (e, id, url) {
