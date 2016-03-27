@@ -15,8 +15,8 @@
 * [Download the latest release](https://github.com/AlexandrStarov/Jquery.Blackgrid/zipball/master)
 * [Clone in Windows](github-windows://openRepo/https://github.com/AlexandrStarov/Jquery.Blackgrid)
 * Clone the repo: `git clone git://github.com/AlexandrStarov/Jquery.Blackgrid.git`
-### Include files in your HTML. The minimum required for this plugin are:
 
+### Include files in your HTML. The minimum required for this plugin are:
     <link rel="stylesheet" href="/path/to/bootstrap.css" />
     <script src="/path/to/jquery.js" type="text/javascript"></script>
     <script src="/path/to/bootstrap.js" type="text/javascript"></script>
