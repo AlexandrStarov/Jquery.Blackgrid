@@ -2,6 +2,7 @@
     $.BlackGrid = {};
     var _tables = {};
     var _tablesCache = {};
+    var _checkedObjects = {};
 
     $.BlackGrid.Create = function (tableParameters, searchingParameters) {
         var tableId = "tbl-" + tableParameters.Id
@@ -12,24 +13,61 @@
             $('#' + tableParameters.Id).append(_getGlobalSearchMarkup() + '<br />' + '<br />');
         }
 
+        var mainCheckbox = ['', ''];
+        if (tableParameters.EnableCheckBox) {
+            mainCheckbox = ['<label class="checkbox-inline"><input type="checkbox" data-name="main"> ', '</label>'];
+        }
+
         var cells = '';
         $.each(tableParameters.Columns, function (index, value) {
-            cells += '<td data-name="' + this.name + '" data-searchable="' + this.searchable + '">' + this.text + '</td>\n';
+            if (index == 0) {
+                cells += '<td data-name="' + this.name + '" data-searchable="' + this.searchable + '">' + mainCheckbox[0] + this.text + mainCheckbox[1] + '</td>\n';
+            } else {
+                cells += '<td data-name="' + this.name + '" data-searchable="' + this.searchable + '">' + this.text + '</td>\n';
+            }
         });
         $('#' + tableParameters.Id).append('<div class="blackgrid-main"><table id="' + tableId + '" class="' + tableParameters.TableClasses + '"><thead><tr>' + cells + '</tr></thead><tbody></tbody></table></div>')
 
-        _loadChildren(null, tableParameters.Url, tableId)
+        _loadChildren(null, tableParameters.Url, tableId);
     };
 
-    $.BlackGrid.GetObject = function (tableId, rowIndex) {
-        var tdArr$ = $('#' + tableId + ' tbody tr:eq(' + rowIndex + ') td');
+    function _hideColumns(tableId) {
+        var headDictionary = _getHeadDictionary(tableId);
+        var columnsParameters = _tables[tableId].Columns;
+
+        $.each(headDictionary, function (key, value) {
+            $.each(columnsParameters, function (index, column) {
+                if (column.visible == false && column.name == key) {
+                    $('#' + tableId + ' td:nth-child(' + (value + 1) + ')').hide();
+                }
+            });
+        });
+    }
+
+    $.BlackGrid.GetObject = _getObjectById;
+
+    $.BlackGrid.GetSelectedObject = function (tableId) {
+        var objectId = $('#' + tableId + ' tbody tr.blackgrid-selected').data('id');
+        return _getObjectById(tableId, objectId);
+    };
+
+    $.BlackGrid.GetCheckedObjects = _getCheckedObjects;
+
+    function _getObjectById(tableId, objectId) {
+        var tdArr$ = $('#' + tableId + ' tbody tr[data-id=' + objectId + '] td');
         var headDictionary = _getHeadDictionary(tableId);
         var rowObject = {};
         $.each(headDictionary, function (key, value) {
             rowObject[key] = $.trim($(tdArr$[value]).text());
         });
+        rowObject['Id'] = objectId;
+        rowObject['ParentId'] = $('#' + tableId + ' tbody tr[data-id=' + objectId + ']').data('parentid');
         return rowObject;
-    };
+    }
+
+    function _getCheckedObjects(tableId) {
+        return _checkedObjects['tbl-' + tableId];
+    }
 
     function _getHeadDictionary(tableId) {
         var rowObject = {};
@@ -39,20 +77,49 @@
         return rowObject;
     }
 
-    function _combineRow(data, paddingLeft, parentId, headDictionary) {
+    function _combineRow(data, paddingLeft, parentId, headDictionary, tableId) {
         var icon = data.HasChildren ? _getIconCaretRight() : _getEmptyIcon();
         paddingLeft += 14;
         var rowData = '';
+        var checked = false;
+        if (_tables[tableId].EnableCheckBox) {
+            checked = $('#' + tableId).find('tr[data-id=' + parentId + ']').find('input[type=checkbox]').is(':checked');
+        }
+        var columnsParameters = _tables[tableId].Columns;
 
         $.each(headDictionary, function (key, value) {
             if (value == 0) {
-                rowData += '<td style="padding-left:' + paddingLeft + 'px;">' + icon + ' ' + data[key] + '</td>'
+                if (_tables[tableId].EnableCheckBox) {
+                    rowData += '<td style="padding-left:' + paddingLeft + 'px;">' + icon + ' <label class="checkbox-inline"><input type="checkbox" ' + _getFinalDecisionByCheckbox(checked, data.Id, tableId) + '> ' + data[key] + '</label></td>'
+                } else {
+                    rowData += '<td style="padding-left:' + paddingLeft + 'px;">' + icon + ' ' + data[key] + '</td>'
+                }
             } else {
                 rowData += '<td>' + data[key] + '</td>'
             }
         });
 
         return '<tr data-role="row" data-id="' + data.Id + '" data-parentId="' + parentId + '" data-haschildren="' + data.HasChildren + '">' + rowData + '</tr>';
+    }
+
+    function _getFinalDecisionByCheckbox(checked, objectId, tableId) {
+        var objs = _checkedObjects[tableId]
+        var contains = false;
+
+        if (objs != undefined) {
+            $.each(objs, function (index, obj) {
+                if (obj.Id == objectId) {
+                    contains = true;
+                }
+            });
+        }
+
+        var isChecked = '';
+        if (checked || contains) {
+            isChecked = 'checked';
+        }
+
+        return isChecked;
     }
 
     function _combineSearchingRow(data, headDictionary) {
@@ -86,41 +153,37 @@
                 _enableLoading(tableId, false);
                 $(document).trigger('BlackGrid_DownloadSuccessful', [tableId, url]);
                 var headDictionary = _getHeadDictionary(tableId)
+                var enableCheckbox = _tables[tableId].EnableCheckBox;
 
                 if (parentId == null) {
                     $.each(data, function (index, value) {
                         if (value.ParentId == parentId) {
-                            var tr = _combineRow(value, padddingLeft, parentId, headDictionary);
+                            var tr = _combineRow(value, padddingLeft, parentId, headDictionary, tableId);
                             $('#' + tableId + ' > tbody:last-child').append(tr).index('tr:first-child');
                         }
                     });
                 } else {
                     $.each(data, function (index, value) {
-                        if (value.ParentId === parentId) {
-                            $(parent$).after(_combineRow(value, padddingLeft, $(parent$).data('id'), headDictionary));
+                        if (value.ParentId == parentId) {
+                            $(parent$).after(_combineRow(value, padddingLeft, $(parent$).data('id'), headDictionary, tableId));
                         }
                     });
                 }
+
+                _hideColumns(tableId);
             },
             dataType: "json"
         });
     }
 
     function _removeChildren(parentId, tableId) {
-        var currentIndex = $('tr[data-id="' + parentId + '"]').index() + 1;
-        var table = document.getElementById(tableId)
-        var countRows = table.rows.length;
-        var maxPadding = parseInt(window.getComputedStyle(table.rows[currentIndex].cells[0], null).getPropertyValue('padding-left'));
-
-        for (var i = currentIndex + 1; i < countRows; i++) {
-            var tempPadding = parseInt(window.getComputedStyle(table.rows[i].cells[0], null).getPropertyValue('padding-left'));
-            if (tempPadding > maxPadding) {
-                document.getElementById(tableId).deleteRow(i);
-                i--;
-            } else {
-                break;
+        var rows$ = $('#' + tableId).find('tr[data-parentid=' + parentId + ']');
+        $.each(rows$, function (index, tr$) {
+            if ($(tr$).data('haschildren')) {
+                _removeChildren($(tr$).data('id'), tableId);
             }
-        }
+            $(tr$).remove();
+        });
     }
 
     function _getIconCaretRight() {
@@ -175,6 +238,45 @@
         }
     };
 
+    function _checkedCheckbox(parentId, tableId, checked) {
+        var table$ = $('#' + tableId);
+        var rows$ = $(table$).find('tr[data-parentid=' + parentId + ']');
+
+        $.each(rows$, function (index, tr$) {
+            $(tr$).find('input[type=checkbox]').prop('checked', checked);
+            if ($(tr$).data('haschildren')) {
+                _checkedCheckbox($(tr$).data('id'), tableId, checked);
+            }
+        });
+
+        var countChecked = $(table$).find('input[type=checkbox]:checked:not([data-name])').length;
+        var countCheckbox = $(table$).find('input[type=checkbox]:not([data-name])').length;
+        var checkedMainCheckbox = false;
+        if (countChecked == countCheckbox) {
+            checkedMainCheckbox = true;
+        }
+
+        var currentParentId = $(table$).find('tr[data-id=' + parentId + ']').data('parentid');
+        var countParentChecked = $(table$).find('tr[data-parentid=' + currentParentId + '] input[type=checkbox]:checked').length;
+        var countParentCheckbox = $(table$).find('tr[data-parentid=' + currentParentId + '] input[type=checkbox]').length;
+        var checkedParentCheckbox = false;
+        if (countParentChecked == countParentCheckbox) {
+            checkedParentCheckbox = true;
+        }
+
+        $(table$).find('tr[data-id=' + currentParentId + '] input[type=checkbox]').prop('checked', checkedParentCheckbox);
+        $(table$).find('input[type=checkbox][data-name=main]').prop('checked', checkedMainCheckbox);
+    };
+
+    function _getCheckedRows(tableId) {
+        var checkedRows$ = $('#' + tableId).find('input[type=checkbox]:checked:not([data-name])').closest('tr');
+        var objects = [];
+        $.each(checkedRows$, function (index, row$) {
+            objects.push(_getObjectById($(row$).data('id'), tableId));
+        });
+        return objects;
+    }
+
     $(document).on('click', 'i.grid-icon', function () {
         var tr$ = $(this).closest('tr');
         var tableId = $(this).closest('table').attr('id');
@@ -227,14 +329,28 @@
     });
 
     $(document).on("click", "tbody tr", function () {
-
         if ($(this).hasClass("blackgrid-selected")) {
             $(this).removeClass("blackgrid-selected");
         } else {
             var tableId = $(this).closest('table').attr('id');
             $('#' + tableId + ' tr').removeClass("blackgrid-selected");
             $(this).addClass("blackgrid-selected");
-            $(document).trigger('BlackGrid_SelectedRow', [tableId, $(this).index()]);
+            $(document).trigger('BlackGrid_SelectedRow', [tableId, $(this).data('id')]);
+            _hideColumns(tableId)
         }
     });
+
+    $(document).on("change", "table input[type=checkbox]", function () {
+        var parentId = null;
+        var tableId = $(this).closest('table').attr('id');
+        var checked = $(this).is(':checked');
+
+        if ($(this).data('name') != 'main') {
+            parentId = $(this).closest('tr').data('id');
+        }
+
+        _checkedCheckbox(parentId, tableId, checked);
+        _checkedObjects[tableId] = _getCheckedRows(tableId);
+    });
+
 })(jQuery, window, document);

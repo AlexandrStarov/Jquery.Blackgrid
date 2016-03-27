@@ -27,17 +27,18 @@
             MinimalLengthOfTheSearch: 3
         });
 
-        //$.BlackGrid.Create({
-        //    Id: 'dynamic-grid2',
-        //    TableClasses: 'table table-responsive table-bordered blackgrid',
-        //    Url: '/api/countries/',
-        //    Columns: [{ name: "Name", text: "Name", searchable: true },
-        //        { name: "Description", text: "Description", searchable: true }]
-        //},
-        //{
-        //    SaveTreeAfterSearching: false,
-        //    GlobalSearch: false
-        //});
+        $.BlackGrid.Create({
+            Id: 'dynamic-grid2',
+            TableClasses: 'table table-responsive table-bordered blackgrid',
+            Url: '/api/countries/',
+            Columns: [{ name: "Name", text: "Name", searchable: true },
+                { name: "Description", text: "Description", searchable: true, visible: false }],
+            EnableCheckBox: true
+        },
+        {
+            SaveTreeAfterSearching: false,
+            GlobalSearch: false
+        });
 
         $(document).bind('BlackGrid_DownloadSuccessful', function (e, id, url) {
             //console.log('id: ' + id + '; url: ' + url);
